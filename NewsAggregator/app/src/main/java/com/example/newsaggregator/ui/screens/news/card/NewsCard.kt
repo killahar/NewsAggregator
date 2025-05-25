@@ -12,6 +12,7 @@ import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.with
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -222,7 +223,10 @@ fun Image(imageUrl: String, isLongPressed: Boolean) {
 
 @OptIn(ExperimentalAnimationApi::class)
 @Composable
-fun InformationRow(author: String, date: String) {
+fun InformationRow(
+    author: String,
+    date: String
+) {
     var showFullAuthor by remember { mutableStateOf(false) }
     var isOverflowing by remember { mutableStateOf(false) }
 
@@ -232,24 +236,27 @@ fun InformationRow(author: String, date: String) {
             .padding(horizontal = 16.dp, vertical = 8.dp),
         horizontalArrangement = Arrangement.SpaceBetween
     ) {
-        Box(
-            modifier = Modifier.weight(1f).padding(end = 8.dp).let {
-                    if (isOverflowing) {
-                        it.pointerInput(Unit) {
-                            detectTapGestures(onPress = { showFullAuthor = !showFullAuthor })
-                        }
-                    } else it
-                }) {
+        val authorModifier = Modifier
+            .weight(1f)
+            .padding(end = 8.dp)
+            .run {
+                if (isOverflowing) pointerInput(Unit) {
+                    detectTapGestures {
+                        showFullAuthor = !showFullAuthor
+                    }
+                } else this
+            }
+
+        Box(modifier = authorModifier) {
             AnimatedContent(
-                targetState = showFullAuthor && isOverflowing, transitionSpec = {
-                    fadeIn(tween(200)) with fadeOut(tween(200))
-                }, label = "AuthorTransition"
+                targetState = showFullAuthor && isOverflowing,
+                transitionSpec = { fadeIn(tween(200)) with fadeOut(tween(200)) },
+                label = "AuthorTransition"
             ) { expanded ->
                 if (expanded) {
                     Surface(
                         modifier = Modifier
-                            .align(Alignment.TopStart)
-                            .shadow(4.dp, RoundedCornerShape(6.dp)),
+                            .align(Alignment.TopStart),
                         color = MaterialTheme.colorScheme.surface,
                         shape = RoundedCornerShape(6.dp)
                     ) {
@@ -268,9 +275,10 @@ fun InformationRow(author: String, date: String) {
                         fontStyle = FontStyle.Italic,
                         maxLines = 1,
                         overflow = TextOverflow.Ellipsis,
-                        onTextLayout = { textLayoutResult ->
-                            isOverflowing = textLayoutResult.hasVisualOverflow
-                        })
+                        onTextLayout = {
+                            isOverflowing = it.hasVisualOverflow
+                        }
+                    )
                 }
             }
         }
@@ -285,6 +293,17 @@ fun InformationRow(author: String, date: String) {
 }
 
 
+@Preview(showBackground = true)
+@Composable
+fun PreviewInformationRow() {
+    InformationRow(
+        author = "SAIFJIWEIJOjiJOeig OWIGJOIJOIWJEOGI eojgiwejoi (wegweg)",
+        date = "today, 12:34 GMT"
+    )
+}
+
+
+
 @RequiresApi(Build.VERSION_CODES.O)
 @Preview(showBackground = true, backgroundColor = 0xFF000000)
 @Composable
@@ -296,7 +315,7 @@ fun PreviewNewsCard() {
             description = "Описание новости. Описание новости. Описание новости. Описание новости. " + "Описание новости. Описание новости. Описание новости. Описание новости." + "Описание новости. Описание новости. Описание новости. Описание новости.",
             imageUrl = "https://lh3.googleusercontent.com/a/ACg8ocKyWpvLQBbHFl99GmHTyoE_NbWRG_wmTxh-JNAq0tKQYksgmyUu=s432-c-no",
             date = "19 мая 2025",
-            author = "Иван Иванов",
+            author = "Иван Иванов, Егор Егорьев, Вадим Вадимов, Никита Никитин",
             isLongPressed = true,
             link = ""
         ),
