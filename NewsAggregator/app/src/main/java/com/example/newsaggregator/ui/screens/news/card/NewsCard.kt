@@ -1,5 +1,6 @@
 package com.example.newsaggregator.ui.screens.news.card
 
+import android.net.Uri
 import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.compose.animation.AnimatedContent
@@ -118,9 +119,8 @@ fun NewsCard(
                     isVisible = news.isLongPressed
                 )
                 WebButton(
-                    link = news.link,
                     isVisible = news.isLongPressed,
-                    navController = navController
+                    navigate = { navController.navigate("webview/${Uri.encode(news.link)}") }
                 )
             }
         }

@@ -79,17 +79,6 @@ fun NewsFeedScreen(navController: NavHostController) {
     }
 }
 
-
-@Composable
-fun BookmarkScreen(navController: NavHostController) {
-    Text(
-        modifier = Modifier.padding(20.dp),
-        text = "Bookmark Screen.",
-        style = MaterialTheme.typography.displayMedium,
-        color = MaterialTheme.colorScheme.onBackground
-    )
-}
-
 @Composable
 fun SearchScreen(navController: NavHostController) {
     Text(

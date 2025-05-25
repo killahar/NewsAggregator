@@ -20,7 +20,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
 import androidx.navigation.navigation
-import com.example.newsaggregator.ui.screens.news.BookmarkScreen
+import com.example.newsaggregator.ui.screens.bookmark.BookmarkScreen
 import com.example.newsaggregator.ui.screens.news.NewsFeedScreen
 import com.example.newsaggregator.ui.screens.news.SearchScreen
 import com.example.newsaggregator.ui.screens.news.card.actions.web.WebViewScreen
@@ -56,7 +56,7 @@ fun RootNavigationGraph(navController: NavHostController) {
                 arguments = listOf(navArgument("url") { type = NavType.StringType })
             ) { backStackEntry ->
                 val url = backStackEntry.arguments?.getString("url") ?: ""
-                WebViewScreen(link = url)
+                WebViewScreen(link = url, navController)
             }
         }
     }
